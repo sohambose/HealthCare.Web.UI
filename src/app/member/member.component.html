@@ -1,0 +1,11 @@
+<p>This is in Member Component</p>
+
+<div class="row">
+    <div class="col-5">
+        <button class="btn btn-success" (click)=onAddNewMember()>Add a Member</button>
+        <app-member-list></app-member-list>
+    </div>
+    <div class="col-7">
+        <router-outlet></router-outlet>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <form [formGroup]="memberDetailsForm" (ngSubmit)="OnSubmit()">
+                <fieldset>
+                    <legend>Personal Details</legend>
+                    <div class="formGroup" formGroupName="personaldetails">
+                        <label for="txtmembername">Name </label>
+                        <input class="form-control form-control-sm" type="text" id="txtmembername"
+                            formControlName="membername">
+                        <label for="txtDOB">Date of Birth </label>
+                        <input class="form-control form-control-sm" type="date" id="txtDOB" name="birthday"
+                            formControlName="dob">
+                        <label for="txtcontactno">Contact No </label>
+                        <input class="form-control form-control-sm" type="text" id="txtcontactno"
+                            formControlName="contact_no">
+                        <label for="txtaddress">Address </label>
+                        <textarea rows="4" cols="100" class="form-control form-control-sm" id="txtaddress"
+                            formControlName="address"></textarea>
+                    </div>
+                </fieldset>
+                <br />
+                <fieldset>
+                    <legend>Medical Details</legend>
+                    <div class="formGroup" formGroupName="medicaldetails">
+                        <label for="txtbloodGroup">Blood Group </label>
+                        <input class="form-control form-control-sm" type="text" id="txtbloodGroup"
+                            formControlName="blood_group">
+                    </div>
+                </fieldset>
+                <br>
+                <button class="btn btn-primary" [disabled]="!memberDetailsForm.valid" type="button"
+                    (click)="OnSubmit()">Add Member</button>
+                | <button class="btn btn-primary" type="reset" (click)="OnReset()">Clear</button> | <button
+                    class="btn btn-primary" type="reset" (click)="onCancel()">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
