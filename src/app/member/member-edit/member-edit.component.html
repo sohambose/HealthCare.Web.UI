@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <div class="col-12">
+        <div>
             <form [formGroup]="memberDetailsForm" (ngSubmit)="OnSubmit()">
                 <fieldset>
                     <legend>Personal Details</legend>
@@ -17,6 +17,9 @@
                         <label for="txtaddress">Address </label>
                         <textarea rows="4" cols="100" class="form-control form-control-sm" id="txtaddress"
                             formControlName="address"></textarea>
+                        <label for="txtRelation">Relationship </label>
+                        <input class="form-control form-control-sm" type="text" id="txtRelation"
+                            formControlName="relationWithUser">
                     </div>
                 </fieldset>
                 <br />
@@ -29,10 +32,10 @@
                     </div>
                 </fieldset>
                 <br>
-                <button class="btn btn-primary" [disabled]="!memberDetailsForm.valid" type="button"
+                <button class="btn btn-primary btn-sm" [disabled]="!memberDetailsForm.valid" type="button"
                     (click)="OnSubmit()">Add Member</button>
-                | <button class="btn btn-primary" type="reset" (click)="OnReset()">Clear</button> | <button
-                    class="btn btn-primary" type="reset" (click)="onCancel()">Cancel</button>
+                | <button class="btn btn-primary btn-sm" type="reset" (click)="OnReset()">Clear</button> | <button
+                    class="btn btn-primary btn-sm" type="reset" (click)="onCancel()">Cancel</button>
             </form>
         </div>
     </div>

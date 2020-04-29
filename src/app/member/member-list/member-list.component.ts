@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Member } from '../member.model';
+import { MemberService } from '../member.service';
 
 @Component({
   selector: 'app-member-list',
@@ -7,9 +9,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MemberListComponent implements OnInit {
 
-  constructor() { }
+  //---Inject the MemberService to get value from the Subject Observable
+  constructor(private memberService:MemberService) { }
+
+  arrMembers:Member[];
 
   ngOnInit(): void {
+    this.memberService.arrmembersModified.subscribe(
+      (arrMembersFromService:Member[])=>{
+        console.log(arrMembersFromService);
+        this.arrMembers=arrMembersFromService;
+        console.log(this.arrMembers);
+      }
+    );
   }
 
 }

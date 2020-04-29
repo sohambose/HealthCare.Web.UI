@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MemberService } from '../member.service';
+import { Member } from '../member.model';
 
 @Component({
   selector: 'app-member-edit',
@@ -10,8 +12,11 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class MemberEditComponent implements OnInit {
 
   memberDetailsForm: FormGroup;
+  memberObj: Member = new Member();
 
-  constructor(private router: Router, private activatedroute: ActivatedRoute) { }
+  constructor(private router: Router,
+    private activatedroute: ActivatedRoute,
+    private memberService: MemberService) { }
 
   ngOnInit(): void {
     this.memberDetailsForm = new FormGroup({
@@ -20,7 +25,8 @@ export class MemberEditComponent implements OnInit {
         'dob': new FormControl(null, Validators.required),
         'gender': new FormControl('male'),
         'contact_no': new FormControl(null, Validators.required),
-        'address': new FormControl(null, Validators.required)
+        'address': new FormControl(null, Validators.required),
+        'relationWithUser': new FormControl(null)
       }),
       'medicaldetails': new FormGroup({
         'blood_group': new FormControl(null)
@@ -29,9 +35,14 @@ export class MemberEditComponent implements OnInit {
   }
 
   OnSubmit() {
-    alert('submit');
-    alert(this.memberDetailsForm.value.personaldetails.membername);
-    console.log(this.memberDetailsForm);
+    this.memberObj = new Member();
+    this.memberObj.membername = this.memberDetailsForm.value.personaldetails.membername;
+    this.memberObj.dob = this.memberDetailsForm.value.personaldetails.dob;
+    this.memberObj.contactNo = this.memberDetailsForm.value.personaldetails.contactNo;
+    this.memberObj.gender = this.memberDetailsForm.value.personaldetails.gender;
+    this.memberObj.bloodGroup = this.memberDetailsForm.value.personaldetails.bloodGroup;
+    this.memberService.addMember(this.memberObj);
+    this.memberDetailsForm.reset();
   }
 
   OnReset() {

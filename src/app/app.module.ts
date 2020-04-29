@@ -10,6 +10,7 @@ import { MemberListComponent } from './member/member-list/member-list.component'
 import { MemberComponent } from './member/member.component';
 import { MemberDetailComponent } from './member/member-detail/member-detail.component'
 import { AppRoutingModule } from './app-routing.module';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { AppRoutingModule } from './app-routing.module';
     HomeComponent,
     MemberListComponent,
     MemberComponent,
-    MemberDetailComponent
+    MemberDetailComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
