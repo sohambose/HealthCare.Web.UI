@@ -44,7 +44,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.apiSub.unsubscribe();
+    this.apiSub.unsubscribe();    
+    console.log('Unsubscribed');
   }
 
   drawCovidComparisonLineChart() {
@@ -54,7 +55,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.arrCovidTimelineData = arrData;
       this.arrGetTotalCasesData1 = this.dashboardService.GetTotalCasesFromJsonArray(this.arrCovidTimelineData);
       this.arrDates = this.dashboardService.GetDatesFromJsonArray(this.arrCovidTimelineData);
-      console.log(this.arrDates);
       //-----------------Chart Draw Section------------------------------------   
       this.ctx = this.refCanvas1.nativeElement.getContext('2d');
       this.chart = new Chart(this.ctx, {

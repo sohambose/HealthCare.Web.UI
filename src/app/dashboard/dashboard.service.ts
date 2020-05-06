@@ -41,6 +41,7 @@ export class DashboardService {
     }
 
     GetTotalCasesFromJsonArray(arrRawData: any[]) {
+        this.arrTotalCasesData = [];
         console.log("Total Cases--");
         arrRawData.forEach(item => {
             this.arrTotalCasesData.push(item["total_cases"]);
@@ -51,10 +52,11 @@ export class DashboardService {
     }
 
     GetDatesFromJsonArray(arrRawData: any[]) {
+        this.arrDates = [];
         arrRawData.forEach(item => {
             this.arrDates.push(item["id"]);
         })
-        this.arrDates.pop();        
+        this.arrDates.pop();
         return this.arrDates;
     }
 

@@ -13,7 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ChartsModule } from 'ng2-charts';
-import { LandingPageComponent } from './landing-page/landing-page.component';
+import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +25,7 @@ import { LandingPageComponent } from './landing-page/landing-page.component';
     MemberComponent,
     MemberDetailComponent,
     DashboardComponent,
-    LandingPageComponent
+    AuthComponent
   ],
   imports: [
     BrowserModule,
