@@ -1,1 +1,14 @@
-
+<div class="row">
+    <div class="col-lg-6" style="border: groove;">
+        <span *ngIf="isDrawing">Loading Graph...</span>
+        <div *ngIf="isDrawing" class="spinner-border"></div>
+        <p class="errormsg">{{apiErrorMsg}}</p>
+        <canvas id="mycanvas" #canvas1>{{chart}}</canvas>
+    </div>
+    <div class="col-lg-6" style="border: groove;">
+        <span *ngIf="isDrawing">Loading Graph...</span>
+        <div *ngIf="isDrawing" class="spinner-border"></div>
+        <p class="errormsg">{{apiErrorMsg}}</p>
+        <canvas id="mycanvas2" #canvas2>{{chart}}</canvas>
+    </div>
+</div>

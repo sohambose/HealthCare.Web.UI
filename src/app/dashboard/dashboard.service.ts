@@ -1,48 +1,64 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, tap } from 'rxjs/operators';
+import { Key } from 'protractor';
 
-@Injectable()
-export class DashboardService {    
-    arrTimelineData=[];
+@Injectable({
+    providedIn: 'root',
+})
+export class DashboardService {
+    arrTimelineData = [];
+    arrTotalCasesData = [];
+    arrDates = [];
 
     constructor(private http: HttpClient) {
     }
 
     getTimelineDataByCountry() {
-        console.log('Data Fetch From Server Started');
+        console.log('Data Fetch From thevirustracker.com Server Started');
         return this.http
             .get('https://api.thevirustracker.com/free-api?countryTimeline=IN')
             .pipe(
-                map(responsedata => responsedata["timelineitems"])
+                map(responsedata => responsedata["timelineitems"])  //This will return array with 1 item.Th 0yh item has all json objects in it
             )
             .pipe(
-                map(responseData => {
+                map(arrTimeLineItems => arrTimeLineItems[0])  //Return the 0th element-this contains all JSON objects
+            )
+            .pipe(
+                map(arr0thItem => {
                     const TimelineArray = [];
-                    for (const key in responseData) {
-                        if (responseData.hasOwnProperty(key)) {
-                            TimelineArray.push({ ...responseData[key], id: key });
+                    for (const key in arr0thItem) {
+                        if (arr0thItem.hasOwnProperty(key)) {
+                            TimelineArray.push({ ...arr0thItem[key], id: key });
                         }
                     }
-                    console.log('Data Fetch From Server Completed');
-                    console.log(TimelineArray);
                     this.arrTimelineData = TimelineArray;
+                    console.log(TimelineArray);
+                    console.log('Data Fetch From thevirustracker.com Server Completed');
                     return TimelineArray;
                 })
             )
     }
 
-    dovolumneAnalysis(arrCandles: any[], days: number) {
-        alert('In func');
-        for (let i = 0; i < days - 1; i++) {
-            console.log(arrCandles[i]["5. volume"]);
-            this.volume_sum = Number(this.volume_sum) + Number(arrCandles[i]["5. volume"]);
-        }
-        alert(this.volume_sum);
-        this.volume_avg = Number(this.volume_sum) / Number(days);
-        if (this.volume_avg < Number(arrCandles[days - 1]["5. volume"])) {
-            this.IsVolumeIncreased = true;
-        }
-        return this.IsVolumeIncreased;
+    GetTotalCasesFromJsonArray(arrRawData: any[]) {
+        console.log("Total Cases--");
+        arrRawData.forEach(item => {
+            this.arrTotalCasesData.push(item["total_cases"]);
+        })
+        this.arrTotalCasesData.pop();
+        console.log(this.arrTotalCasesData);
+        return this.arrTotalCasesData;
     }
+
+    GetDatesFromJsonArray(arrRawData: any[]) {
+        arrRawData.forEach(item => {
+            this.arrDates.push(item["id"]);
+        })
+        this.arrDates.pop();        
+        return this.arrDates;
+    }
+
+
+
+
 }

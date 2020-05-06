@@ -11,6 +11,9 @@ import { MemberComponent } from './member/member.component';
 import { MemberDetailComponent } from './member/member-detail/member-detail.component'
 import { AppRoutingModule } from './app-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { HttpClientModule } from '@angular/common/http';
+import { ChartsModule } from 'ng2-charts';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 @NgModule({
   declarations: [
@@ -21,13 +24,16 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     MemberListComponent,
     MemberComponent,
     MemberDetailComponent,
-    DashboardComponent
+    DashboardComponent,
+    LandingPageComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
