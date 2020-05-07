@@ -77,7 +77,7 @@ export class AuthService {
         }
         switch (errorRes.error.error.message) {
             case 'EMAIL_EXISTS':
-                errMsg = 'The email address is already in use by another account.';
+                errMsg = 'The email address is already in use by another account. Try another email';
                 break;
             case 'OPERATION_NOT_ALLOWED':
                 errMsg = 'Password sign-in is disabled for this project.';
