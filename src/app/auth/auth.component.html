@@ -18,7 +18,7 @@
             </div>
             <br />
             <div *ngIf="isAuthenticating" class="spinner-border spinner-border-sm"></div>
-            <span *ngIf="isAuthenticating">{{ isLoginMode ? 'Logging user in.....' : 'Registering User.....' }}</span>
+            <span *ngIf="isAuthenticating">{{ isLoginMode ? '  Logging user in.....' : '  Registering User.....' }}</span>
             <div class="alert alert-danger" *ngIf="AuthErr">
                 <p>{{AuthErr}}</p>
             </div>

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AuthService } from './auth.service';
+import { AuthService, AuthResponseData } from './auth.service';
+import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -12,7 +14,7 @@ export class AuthComponent implements OnInit {
   AuthErr: string = '';
   isAuthenticating: boolean = false;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
     this.isLoginMode = true;
@@ -27,20 +29,26 @@ export class AuthComponent implements OnInit {
     const email = form.value.email;
     const password = form.value.password;
 
+    let authObs: Observable<AuthResponseData>;
     this.isAuthenticating = true;
+
     if (this.isLoginMode) {
-      ///Logic for Login...
+      authObs = this.authService.login(email, password);
     }
     else {
-      this.authService.signup(email, password).subscribe(resData => {
-        this.isAuthenticating = false;
-      },
-        errorMsg => {
-          this.AuthErr = errorMsg;
-          this.isAuthenticating = false;
-        }
-      );
+      authObs = this.authService.signup(email, password);
     }
+
+    authObs.subscribe(resData => {
+      this.isAuthenticating = false;
+      this.router.navigate(['/home']);
+    },
+      errorMsg => {
+        this.AuthErr = errorMsg;
+        this.isAuthenticating = false;
+      }
+    );
+
     form.reset();
   }
 }
