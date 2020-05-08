@@ -1,4 +1,7 @@
-export class User {
+/*--------------------------------------------------------------------
+Model to handle and store Firebase Email based User in our app
+---------------------------------------------------------------------*/
+export class FirebaseEmailAuthUser {
     public email: string;
     public id: string;
     private _token: string;

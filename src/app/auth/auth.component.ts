@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AuthService, AuthResponseData } from './auth.service';
+import { FirebaseAuthService, FirebaseAuthResponseData } from './firbase-auth.service';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { AuthService } from './auth.service';
 
 @Component({
   selector: 'app-auth',
@@ -17,6 +18,7 @@ export class AuthComponent implements OnInit {
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
+    this.AuthErr = '';
     this.isLoginMode = true;
   }
 
@@ -29,19 +31,19 @@ export class AuthComponent implements OnInit {
     const email = form.value.email;
     const password = form.value.password;
 
-    let authObs: Observable<AuthResponseData>;
     this.isAuthenticating = true;
 
+    let authObs = this.authService.getAuthResponseTypeObservable();
     if (this.isLoginMode) {
-      authObs = this.authService.login(email, password);
+      authObs = this.authService.emailLogin(email, password); //--Login Mode
     }
     else {
-      authObs = this.authService.signup(email, password);
+      authObs = this.authService.emailSignup(email, password);  //--Signup Mode
     }
 
     authObs.subscribe(resData => {
       this.isAuthenticating = false;
-      this.router.navigate(['/home']);
+      this.router.navigate(['/home']);  //Redirect to Home
     },
       errorMsg => {
         this.AuthErr = errorMsg;
