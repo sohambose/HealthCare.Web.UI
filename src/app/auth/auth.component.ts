@@ -4,7 +4,7 @@ import { FirebaseAuthService, FirebaseAuthResponseData } from './firbase-auth.se
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
-
+//--Change
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
