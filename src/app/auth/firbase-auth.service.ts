@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, tap } from 'rxjs/operators';
-import { throwError, Subject } from 'rxjs';
+import { catchError, timeout } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 import { FirebaseEmailAuthUser } from './firebaseUser.model';
 
 
@@ -60,22 +60,28 @@ export class FirebaseAuthService {
             }
         )
             .pipe(
+                timeout(10000),
                 catchError(errorRes => this.HandleFirebaseEmailAuthError(errorRes))
             );
     }
 
-    /* ///--Handle Auth based on Response From API
-    private HandleAuthentication(responseEmail: string, reponseUserID: string, responseToken: string, responseExpiresIn: number) {
-        //Get Expiration Date---
-        const expirationDate = new Date(
-            new Date().getTime() + responseExpiresIn * 1000
-        );
-        //Create the user based on response Received.
-        const receivedUser = new FirebaseUser(responseEmail, reponseUserID, responseToken, expirationDate);
-        this.contextUser.next(receivedUser);    //Emit this user to required parties as Current Context User
-    } */
+    firebaseEmailAutoLogin() {
+        const storedUserData: {
+            email: string;
+            id: string;
+            _token: string;
+            _tokenexpirationDate: Date;
+        } = JSON.parse(localStorage.getItem('healthcareAuthKey'));
+        if (!storedUserData) {
+            return;
+        }
+        const loadedUser: FirebaseEmailAuthUser = new FirebaseEmailAuthUser(storedUserData.email, storedUserData.id, storedUserData._token, new Date(storedUserData._tokenexpirationDate));
+        if (loadedUser.token) {
+            return loadedUser;
+        }
+    }
 
-    ///--Handle Auth based on Response From API
+    //--Handle Auth based on Response From API and return user to Main Auth Service
     HandleFirebaseAuthentication(resData: FirebaseAuthResponseData) {
         const responseEmail: string = resData.email;
         const reponseUserID: string = resData.localId;
@@ -87,11 +93,17 @@ export class FirebaseAuthService {
         );
         //Create the user based on response Received.
         const receivedUser = new FirebaseEmailAuthUser(responseEmail, reponseUserID, responseToken, expirationDate);
+
+        //----Store User in Local Storage----------
+        localStorage.setItem('healthcareAuthKey', JSON.stringify(receivedUser));
+        //-----------------------------------------
+
         return receivedUser;    //Return the user to Parent Auth Component
     }
 
 
     private HandleFirebaseEmailAuthError(errorRes: HttpErrorResponse) {
+        console.log(errorRes);
         let errMsg = 'Unknown Error Occured';
         if (!errorRes.error || !errorRes.error.error) {
             return throwError(errMsg);
@@ -118,6 +130,10 @@ export class FirebaseAuthService {
 
             case 'USER_DISABLED':
                 errMsg = 'The user account has been disabled by an administrator.'
+                break;
+
+            case 'ERR_CONNECTION_RESET':
+                errMsg = 'Could not connect to server. Please check internet connection or try again later'
                 break;
 
         }

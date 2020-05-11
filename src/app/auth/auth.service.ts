@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { FirebaseAuthService, FirebaseAuthResponseData } from './firbase-auth.service';
 import { FirebaseEmailAuthUser } from './firebaseUser.model';
-import { Subject, Observable } from 'rxjs';
+import { Subject, Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-
+import { Router } from '@angular/router';
 
 @Injectable(
     {
@@ -12,14 +12,16 @@ import { tap } from 'rxjs/operators';
 )
 export class AuthService {
     _contextUser = this.getAuthUserTypeSubject();
+    _AuthMethod;
 
     private authMode: number;
 
-    constructor(private firebaseAuth: FirebaseAuthService) { }
+    constructor(private firebaseAuth: FirebaseAuthService,
+        private router: Router) { }
 
     private getAuthUserTypeSubject() {
         //--------For Google Firebase Type User--------------------
-        return new Subject<FirebaseEmailAuthUser>();  //A new subject
+        return new BehaviorSubject<FirebaseEmailAuthUser>(null);  //A new subject
         //---------------------------------------------------------
     }
 
@@ -53,6 +55,18 @@ export class AuthService {
                     this._contextUser.next(firebaseUser);
                 })
             );;
+        //------------------------------------------------------------------------
+    }
+
+    EmailLogout() {
+        this._contextUser.next(null);
+        this.router.navigate(['/auth']);
+    }
+
+    EmailAutoLogin() {
+        //--------------Case for Firebase Email Auto Login-------------------
+        const loadedUser = this.firebaseAuth.firebaseEmailAutoLogin();
+        this._contextUser.next(loadedUser);
         //------------------------------------------------------------------------
     }
 }

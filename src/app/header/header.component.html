@@ -3,8 +3,14 @@
         LOGO
     </a>
     <!-- Links -->
-    <ul class="navbar-nav">
+    <ul class="nav navbar-nav navbar-left">
         <li class="nav-item"><a class="nav-link" routerLink="/home">Home</a></li>
-        <li class="nav-item"><a class="nav-link" routerLink="/member">Member</a></li>       
+        <li class="nav-item"><a class="nav-link" routerLink="/member">Member</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+        <li class="nav-item">
+            <a class="nav-link" routerLink="/auth"
+                (click)="onLogout()">{{isAuthenticated? 'Logout' : 'Login/Signup'}}</a>
+        </li>
     </ul>
 </nav>
