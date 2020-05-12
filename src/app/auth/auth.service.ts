@@ -15,11 +15,13 @@ export class AuthService {
     //Get Auth Method from Local storage- Auth Component will store the value.
     _AuthMethod: number;
     _contextUser = this.getAuthUserTypeSubject();
+    //_contextUser = new BehaviorSubject<FirebaseEmailAuthUser>(null);
     tokenExpirationTimer;
     EmailAuthExpiresIn;
 
     constructor(private firebaseAuth: FirebaseAuthService,
         private router: Router) {
+        this._contextUser = this.getAuthUserTypeSubject();
     }
 
     private getAuthUserTypeSubject() {
@@ -29,7 +31,7 @@ export class AuthService {
                 return new BehaviorSubject<FirebaseEmailAuthUser>(null);  //For Google Firebase Type User
             }
             default: {
-                return null;
+                return new BehaviorSubject<FirebaseEmailAuthUser>(null);
             }
         }
     }
@@ -81,11 +83,13 @@ export class AuthService {
                             const firebaseUser = this.firebaseAuth.HandleFirebaseAuthentication(resData);
                             this.EmailAuthExpiresIn = resData.expiresIn;
                             if (this._contextUser == null) {
-                                this._AuthMethod = Number(localStorage.getItem('AuthMode'));
                                 this._contextUser = this.getAuthUserTypeSubject();
                             }
-                            this._contextUser.next(firebaseUser);
                             this.EmailAutoLogout(this.EmailAuthExpiresIn * 1000);
+                            this._contextUser.next(firebaseUser);
+                            console.log('After emitting from auth service');
+                            console.log(this._contextUser);
+                            location.reload();
                         })
                     );
             }
@@ -98,9 +102,9 @@ export class AuthService {
     emailAutoLogin() {
         //--------------Case for Firebase Email Auto Login-------------------
         const loadedUser = this.firebaseAuth.firebaseEmailAutoLogin();
-        if (this._contextUser) {
+        if (this._contextUser && loadedUser) {
             this._contextUser.next(loadedUser);
-            this.EmailAutoLogout(new Date(loadedUser.tokeExpirationDate).getTime() - new Date().getTime());
+            this.EmailAutoLogout(new Date(loadedUser.tokenExpirationDate).getTime() - new Date().getTime());
         }
         //------------------------------------------------------------------------
     }

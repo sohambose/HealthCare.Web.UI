@@ -51,7 +51,7 @@ export class AuthComponent implements OnInit {
     console.log(authObs);
     authObs.subscribe(resData => {
       this.isAuthenticating = false;
-      this.router.navigate(['/home']);  //Redirect to Home
+      this.router.navigate(['/home']);  //Redirect to Home      
     },
       errorMsg => {
         this.AuthErr = errorMsg;

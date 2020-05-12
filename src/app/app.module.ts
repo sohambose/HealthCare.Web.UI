@@ -40,6 +40,5 @@ import { AuthComponent } from './auth/auth.component';
 })
 export class AppModule {
   constructor() {
-    console.log('In App module');
   }
 }

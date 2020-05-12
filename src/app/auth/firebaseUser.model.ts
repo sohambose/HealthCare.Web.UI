@@ -20,7 +20,7 @@ export class FirebaseEmailAuthUser {
         }
         return this._token;
     }
-    get tokeExpirationDate(){
+    get tokenExpirationDate() {
         return this._tokenexpirationDate;
     }
 }

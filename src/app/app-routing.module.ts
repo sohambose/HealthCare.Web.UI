@@ -7,16 +7,17 @@ import { MemberEditComponent } from './member/member-edit/member-edit.component'
 import { MemberDetailComponent } from './member/member-detail/member-detail.component';
 import { NgModule } from '@angular/core';
 import { AuthComponent } from './auth/auth.component';
+import { AuthGuard } from './auth/auth.guard';
 
 
 const appRoutes: Routes = [
-    { path: '', redirectTo: '/home', pathMatch: 'full' },
-    { path: 'home', component: HomeComponent },
+    { path: '', redirectTo: '/auth', pathMatch: 'full' },
     { path: 'auth', component: AuthComponent },
+    { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
     {
-        path: 'member', component: MemberComponent, children: [
+        path: 'member', component: MemberComponent, canActivate: [AuthGuard],
+        children: [
             { path: 'new', component: MemberEditComponent },
-            { path: ':id', component: MemberDetailComponent },
             { path: ':id', component: MemberDetailComponent },
             { path: ':id/edit', component: MemberEditComponent }
         ]
