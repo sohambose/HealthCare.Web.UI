@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { FirebaseAuthService, FirebaseAuthResponseData } from './firbase-auth.service';
 import { FirebaseEmailAuthUser } from './firebaseUser.model';
-import { Subject, Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { AuthMethods } from '../AppUtilities/AppEnum';
 
 @Injectable(
     {
@@ -11,62 +12,113 @@ import { Router } from '@angular/router';
     }
 )
 export class AuthService {
+    //Get Auth Method from Local storage- Auth Component will store the value.
+    _AuthMethod: number;
     _contextUser = this.getAuthUserTypeSubject();
-    _AuthMethod;
-
-    private authMode: number;
+    tokenExpirationTimer;
+    EmailAuthExpiresIn;
 
     constructor(private firebaseAuth: FirebaseAuthService,
-        private router: Router) { }
+        private router: Router) {
+    }
 
     private getAuthUserTypeSubject() {
-        //--------For Google Firebase Type User--------------------
-        return new BehaviorSubject<FirebaseEmailAuthUser>(null);  //A new subject
-        //---------------------------------------------------------
+        this._AuthMethod = Number(localStorage.getItem('AuthMode'));
+        switch (this._AuthMethod) {
+            case AuthMethods.googleFirebaseEmailAuth: {
+                return new BehaviorSubject<FirebaseEmailAuthUser>(null);  //For Google Firebase Type User
+            }
+            default: {
+                return null;
+            }
+        }
     }
 
     getAuthResponseTypeObservable() {
-        //--------For Google Firebase Email Type Response----------
-        return new Observable<FirebaseAuthResponseData>();
-        //---------------------------------------------------------
+        this._AuthMethod = Number(localStorage.getItem('AuthMode'));
+        switch (this._AuthMethod) {
+            case AuthMethods.googleFirebaseEmailAuth: {
+                return new Observable<FirebaseAuthResponseData>();
+            }
+            default: {
+                return null;
+            }
+        }
     }
 
 
-    //Generic method to call signup- Decide inside which backend service to call
+    //Generic method to call Email signup- Decide inside which backend service to call
     emailSignup(inputEmailID: string, inputPassword: string) {
-        //----------------Google Firebase Authentication--------------------------
-        return this.firebaseAuth.firebaseEmailSignup(inputEmailID, inputPassword)
-            .pipe(
-                tap(resData => {
-                    const firebaseUser = this.firebaseAuth.HandleFirebaseAuthentication(resData);
-                    this._contextUser.next(firebaseUser);
-                })
-            );
+        this._AuthMethod = Number(localStorage.getItem('AuthMode'));
+        switch (this._AuthMethod) {
+            case AuthMethods.googleFirebaseEmailAuth: {
+                return this.firebaseAuth.firebaseEmailSignup(inputEmailID, inputPassword)
+                    .pipe(
+                        tap(resData => {
+                            const firebaseUser = this.firebaseAuth.HandleFirebaseAuthentication(resData);
+                            if (this._contextUser == null) {
+                                this._AuthMethod = Number(localStorage.getItem('AuthMode'));
+                                this._contextUser = this.getAuthUserTypeSubject();
+                            }
+                            this._contextUser.next(firebaseUser);
+                        })
+                    );
+            }
+            default: {
+                return null;
+            }
+        }
+    }
+
+    //Generic method to call EmailLogin- Decide inside which backend service to call
+    emailLogin(inputEmailID: string, inputPassword: string) {
+        this._AuthMethod = Number(localStorage.getItem('AuthMode'));
+        switch (this._AuthMethod) {
+            case AuthMethods.googleFirebaseEmailAuth: {
+                return this.firebaseAuth.firebaseEmailLogin(inputEmailID, inputPassword)
+                    .pipe(
+                        tap(resData => {
+                            const firebaseUser = this.firebaseAuth.HandleFirebaseAuthentication(resData);
+                            this.EmailAuthExpiresIn = resData.expiresIn;
+                            if (this._contextUser == null) {
+                                this._AuthMethod = Number(localStorage.getItem('AuthMode'));
+                                this._contextUser = this.getAuthUserTypeSubject();
+                            }
+                            this._contextUser.next(firebaseUser);
+                            this.EmailAutoLogout(this.EmailAuthExpiresIn * 1000);
+                        })
+                    );
+            }
+            default: {
+                return null;
+            }
+        }
+    }
+
+    emailAutoLogin() {
+        //--------------Case for Firebase Email Auto Login-------------------
+        const loadedUser = this.firebaseAuth.firebaseEmailAutoLogin();
+        if (this._contextUser) {
+            this._contextUser.next(loadedUser);
+            this.EmailAutoLogout(new Date(loadedUser.tokeExpirationDate).getTime() - new Date().getTime());
+        }
         //------------------------------------------------------------------------
     }
 
-    //Generic method to call Login- Decide inside which backend service to call
-    emailLogin(inputEmailID: string, inputPassword: string) {
-        //----------------Google Firebase Authentication--------------------------
-        return this.firebaseAuth.firebaseEmailLogin(inputEmailID, inputPassword)
-            .pipe(
-                tap(resData => {
-                    const firebaseUser = this.firebaseAuth.HandleFirebaseAuthentication(resData);
-                    this._contextUser.next(firebaseUser);
-                })
-            );;
-        //------------------------------------------------------------------------
+    EmailAutoLogout(expirationDuration: number) {
+        this.tokenExpirationTimer = setTimeout(() => {
+            this.EmailLogout();
+        }, expirationDuration);
     }
 
     EmailLogout() {
         this._contextUser.next(null);
         this.router.navigate(['/auth']);
-    }
-
-    EmailAutoLogin() {
-        //--------------Case for Firebase Email Auto Login-------------------
-        const loadedUser = this.firebaseAuth.firebaseEmailAutoLogin();
-        this._contextUser.next(loadedUser);
-        //------------------------------------------------------------------------
+        localStorage.removeItem('healthcareAuthKey');
+        localStorage.removeItem('AuthMode');
+        if (this.tokenExpirationTimer) {
+            clearTimeout(this.tokenExpirationTimer);
+        }
+        this.tokenExpirationTimer = null;
     }
 }

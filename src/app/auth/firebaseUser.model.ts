@@ -4,8 +4,8 @@ Model to handle and store Firebase Email based User in our app
 export class FirebaseEmailAuthUser {
     public email: string;
     public id: string;
-    protected _token: string;
-    protected _tokenexpirationDate: Date;
+    private _token: string;
+    private _tokenexpirationDate: Date;
 
     constructor(email: string, id: string, _token: string, _tokenexpirationDate: Date) {
         this.email = email;
@@ -19,5 +19,8 @@ export class FirebaseEmailAuthUser {
             return null;
         }
         return this._token;
+    }
+    get tokeExpirationDate(){
+        return this._tokenexpirationDate;
     }
 }

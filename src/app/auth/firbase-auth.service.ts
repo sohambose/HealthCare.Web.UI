@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { catchError, timeout } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { FirebaseEmailAuthUser } from './firebaseUser.model';
+import { AuthMethods } from '../AppUtilities/AppEnum';
 
 
 /*----------------------------------------------------------------------------- 
@@ -33,7 +34,7 @@ export interface FirebaseAuthResponseData {
     }
 )
 export class FirebaseAuthService {
-    //contextUser = new Subject<FirebaseUser>(); //A new subject
+    tokenExpirationTimer;
     constructor(private http: HttpClient) { }
 
     firebaseEmailSignup(inputemail: string, inputpassword: string) {
@@ -80,6 +81,7 @@ export class FirebaseAuthService {
             return loadedUser;
         }
     }
+    
 
     //--Handle Auth based on Response From API and return user to Main Auth Service
     HandleFirebaseAuthentication(resData: FirebaseAuthResponseData) {
@@ -96,6 +98,7 @@ export class FirebaseAuthService {
 
         //----Store User in Local Storage----------
         localStorage.setItem('healthcareAuthKey', JSON.stringify(receivedUser));
+        //localStorage.setItem('AuthMode', AuthMethods.googleFirebaseEmailAuth.toString());
         //-----------------------------------------
 
         return receivedUser;    //Return the user to Parent Auth Component

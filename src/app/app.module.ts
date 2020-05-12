@@ -38,4 +38,8 @@ import { AuthComponent } from './auth/auth.component';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor() {
+    console.log('In App module');
+  }
+}

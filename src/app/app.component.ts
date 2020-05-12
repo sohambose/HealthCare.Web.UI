@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from './auth/auth.service';
+import { AuthMethods } from './AppUtilities/AppEnum';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     console.log('appcomponent- Init');
-    this.authService.EmailAutoLogin();
+    this.authService.emailAutoLogin();
   }
 }
