@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MemberService } from '../member.service';
 import { Member } from '../member.model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-member-edit',
@@ -50,13 +51,15 @@ export class MemberEditComponent implements OnInit {
   }
 
   onCancel() {
+    this.router.navigate(['/member']);
+  }
+
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
     if (this.memberDetailsForm.dirty) {
-      if (confirm('Any unsaved information will be lost? Continue?')) {
-        this.router.navigate(['/member']);
-      }
+      return confirm('Do you want to discard changes?');
     }
     else {
-      this.router.navigate(['/member']);
+      return true;
     }
   }
 

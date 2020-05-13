@@ -89,7 +89,6 @@ export class AuthService {
                             this._contextUser.next(firebaseUser);
                             console.log('After emitting from auth service');
                             console.log(this._contextUser);
-                            location.reload();
                         })
                     );
             }

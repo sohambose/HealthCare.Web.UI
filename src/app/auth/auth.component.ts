@@ -4,7 +4,7 @@ import { FirebaseAuthService, FirebaseAuthResponseData } from './firbase-auth.se
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
-import { AuthMethods, MailMethod } from '../AppUtilities/AppEnum';
+
 //--Change
 @Component({
   selector: 'app-auth',
@@ -48,9 +48,10 @@ export class AuthComponent implements OnInit {
     else {
       authObs = this.authService.emailSignup(email, password);  //--Signup Mode
     }
-    console.log(authObs);
+
     authObs.subscribe(resData => {
       this.isAuthenticating = false;
+      alert('Redirecting to home');
       this.router.navigate(['/home']);  //Redirect to Home      
     },
       errorMsg => {

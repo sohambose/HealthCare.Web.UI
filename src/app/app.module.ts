@@ -14,6 +14,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ChartsModule } from 'ng2-charts';
 import { AuthComponent } from './auth/auth.component';
+import { CanDeactivateGuard } from './CommonServices/can-deactivate-guard.service';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,7 @@ import { AuthComponent } from './auth/auth.component';
     ReactiveFormsModule,
     ChartsModule
   ],
-  providers: [],
+  providers: [CanDeactivateGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule {

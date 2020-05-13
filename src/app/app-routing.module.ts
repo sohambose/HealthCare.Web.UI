@@ -8,18 +8,22 @@ import { MemberDetailComponent } from './member/member-detail/member-detail.comp
 import { NgModule } from '@angular/core';
 import { AuthComponent } from './auth/auth.component';
 import { AuthGuard } from './auth/auth.guard';
+import { CanDeactivateGuard } from './CommonServices/can-deactivate-guard.service';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 const appRoutes: Routes = [
-    { path: '', redirectTo: '/auth', pathMatch: 'full' },
+    { path: '', redirectTo: '/home', pathMatch: 'full' },
     { path: 'auth', component: AuthComponent },
-    { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+    {
+        path: 'home', component: HomeComponent, canActivate: [AuthGuard]
+    },
     {
         path: 'member', component: MemberComponent, canActivate: [AuthGuard],
         children: [
-            { path: 'new', component: MemberEditComponent },
+            { path: 'new', component: MemberEditComponent, canDeactivate: [CanDeactivateGuard] },
             { path: ':id', component: MemberDetailComponent },
-            { path: ':id/edit', component: MemberEditComponent }
+            { path: ':id/edit', component: MemberEditComponent, canDeactivate: [CanDeactivateGuard] }
         ]
     },
 ];

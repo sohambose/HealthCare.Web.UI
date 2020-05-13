@@ -10,8 +10,7 @@ export class HomeComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    console.log('In Home');
-    console.log(this.authService._contextUser);
+    alert('home loaded');
   }
 
 }

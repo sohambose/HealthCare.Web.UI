@@ -3,7 +3,3 @@ export enum AuthMethods {
     FacebookAuth = 2
 }
 
-export enum MailMethod {
-    POP,
-    IMAP
-}

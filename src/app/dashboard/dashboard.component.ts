@@ -40,11 +40,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   //-------------------------------------------------  
 
   ngOnInit(): void {
+    alert('Dashboard Loaded');
     this.drawCovidComparisonLineChart();
   }
 
   ngOnDestroy() {
-    this.apiSub.unsubscribe();    
+    this.apiSub.unsubscribe();
     console.log('Unsubscribed');
   }
 
