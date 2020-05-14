@@ -14,8 +14,7 @@ export class DashboardService {
     constructor(private http: HttpClient) {
     }
 
-    getTimelineDataByCountry() {
-        console.log('Data Fetch From thevirustracker.com Server Started');
+    getTimelineDataByCountry() {        
         return this.http
             .get('https://api.thevirustracker.com/free-api?countryTimeline=IN')
             .pipe(
@@ -32,22 +31,18 @@ export class DashboardService {
                             TimelineArray.push({ ...arr0thItem[key], id: key });
                         }
                     }
-                    this.arrTimelineData = TimelineArray;
-                    console.log(TimelineArray);
-                    console.log('Data Fetch From thevirustracker.com Server Completed');
+                    this.arrTimelineData = TimelineArray;                   
                     return TimelineArray;
                 })
             )
     }
 
     GetTotalCasesFromJsonArray(arrRawData: any[]) {
-        this.arrTotalCasesData = [];
-        console.log("Total Cases--");
+        this.arrTotalCasesData = [];       
         arrRawData.forEach(item => {
             this.arrTotalCasesData.push(item["total_cases"]);
         })
-        this.arrTotalCasesData.pop();
-        console.log(this.arrTotalCasesData);
+        this.arrTotalCasesData.pop();       
         return this.arrTotalCasesData;
     }
 

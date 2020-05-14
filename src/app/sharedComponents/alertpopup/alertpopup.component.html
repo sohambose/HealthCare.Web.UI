@@ -1,0 +1,10 @@
+<div class="backdrop-haze" *ngIf="dialogText" (click)="onClickNo()">
+</div>
+
+<div class="alert-box" *ngIf="dialogText">
+    <p>{{dialogText}}</p>
+    <div class="alert-box-actions">
+        <button class="btn btn-primary" (click)="onClickYes()">Yes</button>&nbsp;
+        <button class="btn btn-primary" (click)="onClickNo()">No</button>
+    </div>
+</div>

@@ -10,16 +10,14 @@ import { MemberService } from '../member.service';
 export class MemberListComponent implements OnInit {
 
   //---Inject the MemberService to get value from the Subject Observable
-  constructor(private memberService:MemberService) { }
+  constructor(private memberService: MemberService) { }
 
-  arrMembers:Member[];
+  arrMembers: Member[];
 
   ngOnInit(): void {
     this.memberService.arrmembersModified.subscribe(
-      (arrMembersFromService:Member[])=>{
-        console.log(arrMembersFromService);
-        this.arrMembers=arrMembersFromService;
-        console.log(this.arrMembers);
+      (arrMembersFromService: Member[]) => {
+        this.arrMembers = arrMembersFromService;
       }
     );
   }

@@ -106,8 +106,7 @@ export class FirebaseAuthService {
     }
 
 
-    private HandleFirebaseEmailAuthError(errorRes: HttpErrorResponse) {
-        console.log(errorRes);
+    private HandleFirebaseEmailAuthError(errorRes: HttpErrorResponse) {        
         let errMsg = 'Unknown Error Occured';
         if (!errorRes.error || !errorRes.error.error) {
             return throwError(errMsg);

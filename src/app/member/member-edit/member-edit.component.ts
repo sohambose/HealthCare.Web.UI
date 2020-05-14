@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MemberService } from '../member.service';
 import { Member } from '../member.model';
 import { Observable } from 'rxjs';
+import { CustomDialogService, DialogType, Dialog } from 'src/app/commonServices/customdialogbox.service';
 
 @Component({
   selector: 'app-member-edit',
@@ -14,10 +15,13 @@ export class MemberEditComponent implements OnInit {
 
   memberDetailsForm: FormGroup;
   memberObj: Member = new Member();
+  alertmsg: string;
+  isAllowNavigate: boolean;
 
   constructor(private router: Router,
     private activatedroute: ActivatedRoute,
-    private memberService: MemberService) { }
+    private memberService: MemberService,
+    private customDialogBoxService: CustomDialogService) { }
 
   ngOnInit(): void {
     this.memberDetailsForm = new FormGroup({
@@ -56,11 +60,11 @@ export class MemberEditComponent implements OnInit {
 
   canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
     if (this.memberDetailsForm.dirty) {
-      return confirm('Do you want to discard changes?');
+      this.customDialogBoxService.showModal('Unsaved changes will be lost');
+      return this.customDialogBoxService.responseSubject;
     }
     else {
       return true;
     }
   }
-
 }

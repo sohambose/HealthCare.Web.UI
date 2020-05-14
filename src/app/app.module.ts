@@ -15,6 +15,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ChartsModule } from 'ng2-charts';
 import { AuthComponent } from './auth/auth.component';
 import { CanDeactivateGuard } from './CommonServices/can-deactivate-guard.service';
+import { AlertpopupComponent } from './sharedComponents/alertpopup/alertpopup.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { CanDeactivateGuard } from './CommonServices/can-deactivate-guard.servic
     MemberComponent,
     MemberDetailComponent,
     DashboardComponent,
-    AuthComponent
+    AuthComponent,
+    AlertpopupComponent
   ],
   imports: [
     BrowserModule,

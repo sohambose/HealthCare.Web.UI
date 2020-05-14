@@ -34,15 +34,13 @@ export class AuthComponent implements OnInit {
   }
 
 
-  onSubmit(form: NgForm) {
-    console.log(form.value);
+  onSubmit(form: NgForm) {    
     const email = form.value.email;
     const password = form.value.password;
 
     this.isAuthenticating = true;
     let authObs = this.authService.getAuthResponseTypeObservable();
-    if (this.isLoginMode) {
-      console.log('In Login mode');
+    if (this.isLoginMode) {      
       authObs = this.authService.emailLogin(email, password); //--Login Mode
     }
     else {
@@ -50,8 +48,7 @@ export class AuthComponent implements OnInit {
     }
 
     authObs.subscribe(resData => {
-      this.isAuthenticating = false;
-      alert('Redirecting to home');
+      this.isAuthenticating = false;      
       this.router.navigate(['/home']);  //Redirect to Home      
     },
       errorMsg => {
