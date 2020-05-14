@@ -58,10 +58,12 @@ export class AuthService {
                     .pipe(
                         tap(resData => {
                             const firebaseUser = this.firebaseAuth.HandleFirebaseAuthentication(resData);
+                            this.EmailAuthExpiresIn = resData.expiresIn;
                             if (this._contextUser == null) {
                                 this._AuthMethod = Number(localStorage.getItem('AuthMode'));
                                 this._contextUser = this.getAuthUserTypeSubject();
                             }
+                            this.EmailAutoLogout(this.EmailAuthExpiresIn * 1000);
                             this._contextUser.next(firebaseUser);
                         })
                     );
@@ -87,8 +89,6 @@ export class AuthService {
                             }
                             this.EmailAutoLogout(this.EmailAuthExpiresIn * 1000);
                             this._contextUser.next(firebaseUser);
-                            console.log('After emitting from auth service');
-                            console.log(this._contextUser);
                         })
                     );
             }

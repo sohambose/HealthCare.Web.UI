@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { catchError, timeout } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 import { FirebaseEmailAuthUser } from './firebaseUser.model';
+import { AppConfigs } from '../AppUtilities/AppConstants';
 import { AuthMethods } from '../AppUtilities/AppEnum';
 
 
@@ -39,7 +40,7 @@ export class FirebaseAuthService {
 
     firebaseEmailSignup(inputemail: string, inputpassword: string) {
         return this.http.post<FirebaseAuthResponseData>(
-            'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDesy12EjKKzZZOgBBmm7MA4R8s_elsIrw',
+            'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + AppConfigs.FirebaseAPIAuthKey,
             {
                 email: inputemail,
                 password: inputpassword,
@@ -53,7 +54,7 @@ export class FirebaseAuthService {
 
     firebaseEmailLogin(inputemail: string, inputpassword: string) {
         return this.http.post<FirebaseAuthResponseData>(
-            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDesy12EjKKzZZOgBBmm7MA4R8s_elsIrw',
+            'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=' + AppConfigs.FirebaseAPIAuthKey,
             {
                 email: inputemail,
                 password: inputpassword,
@@ -81,7 +82,7 @@ export class FirebaseAuthService {
             return loadedUser;
         }
     }
-    
+
 
     //--Handle Auth based on Response From API and return user to Main Auth Service
     HandleFirebaseAuthentication(resData: FirebaseAuthResponseData) {
