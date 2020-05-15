@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MemberService } from '../member.service';
 import { Member } from '../member.model';
 import { Observable } from 'rxjs';
-import { CustomDialogService, DialogType, Dialog } from 'src/app/commonServices/customdialogbox.service';
+import { CustomDialogService } from 'src/app/commonServices/customdialogbox.service';
 
 @Component({
   selector: 'app-member-edit',
@@ -19,7 +19,6 @@ export class MemberEditComponent implements OnInit {
   isAllowNavigate: boolean;
 
   constructor(private router: Router,
-    private activatedroute: ActivatedRoute,
     private memberService: MemberService,
     private customDialogBoxService: CustomDialogService) { }
 
