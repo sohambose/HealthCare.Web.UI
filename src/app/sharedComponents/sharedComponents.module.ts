@@ -13,6 +13,6 @@ import { CommonModule } from '@angular/common';
         AlertpopupComponent
     ]
 })
-export class SharedToolModules {
+export class SharedComponentModules {
 
 }
