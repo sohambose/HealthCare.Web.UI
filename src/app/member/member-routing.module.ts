@@ -8,7 +8,7 @@ import { MemberDetailComponent } from './member-detail/member-detail.component';
 
 const memberModuleRoutes: Routes = [
     {
-        path: 'member', component: MemberComponent, canActivate: [AuthGuard],
+        path: '', component: MemberComponent, canActivate: [AuthGuard],
         children: [
             { path: 'new', component: MemberEditComponent, canDeactivate: [CanDeactivateGuard] },
             { path: ':id', component: MemberDetailComponent },
